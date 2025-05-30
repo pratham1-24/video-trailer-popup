@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Video Trailer Popup</title>
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome CDN -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <!-- GSAP CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+  <!-- Custom Styles -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="bg-black text-white flex items-center justify-center min-h-screen transition-colors duration-500">
+
+  <div class="max-w-md text-center bg-white/10 text-white rounded-xl p-6 backdrop-blur-lg shadow-lg dark:bg-black/40" id="mainContainer">
+    <img
+      class="rounded-lg mb-4"
+      src="https://images.pexels.com/photos/3062545/pexels-photo-3062545.jpeg"
+      alt="Movie poster"
+    />
+    <h1 class="text-2xl font-semibold">Movie Title</h1>
+    <p class="my-4">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa minima repellendus magnam omnis earum.
+    </p>
+    <div class="flex justify-center gap-4 flex-wrap">
+      <button id="watchBtn" class="px-4 py-2 bg-white text-black rounded hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500">
+        Watch Now
+      </button>
+      <button id="toggleMode" class="px-4 py-2 bg-white text-black rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
+        Toggle Mode
+      </button>
+      <button id="voiceBtn"
+              aria-label="Activate voice control"
+              title="Voice Control"
+              class="px-4 py-2 bg-white text-black rounded hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        <i class="fa-solid fa-microphone"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="trailer-container active" id="trailerContainer">
+    <video src="trailer.mp4" controls id="trailerVideo"></video>
+    <i class="fa-solid fa-circle-xmark fa-2x close-icon" id="closeIcon" aria-label="Close trailer" title="Close trailer"></i>
+  </div>
+
+  <!-- Custom Script -->
+  <script src="script.js"></script>
+</body>
+</html>

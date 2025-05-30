@@ -1,0 +1,42 @@
+body.dark {
+  background-color: #f9f9f9;
+  color: #111;
+}
+
+.trailer-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.85);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.5s ease-in-out;
+  -webkit-backdrop-filter: blur(10px); /* ✅ Prefix first */
+  backdrop-filter: blur(10px);         /* ✅ Standard next */
+  z-index: 50;
+}
+
+
+.trailer-container.active {
+  visibility: hidden;
+  opacity: 0;
+}
+
+.trailer-container video {
+  max-width: 90%;
+  border-radius: 1rem;
+  outline: none;
+}
+
+.close-icon {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  color: white;
+  cursor: pointer;
+}
