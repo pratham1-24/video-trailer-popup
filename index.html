@@ -1,61 +1,82 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Video Trailer Popup</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Video Gallery</title>
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome CDN -->
+  <!-- Phosphor Icons CDN -->
   <link
     rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    crossorigin="anonymous"
-    referrerpolicy="no-referrer"
+    href="https://unpkg.com/phosphor-icons@1.4.1/dist/phosphor.min.css"
   />
-
-  <!-- GSAP CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-
-  <!-- Custom Styles -->
-  <link rel="stylesheet" href="style.css" />
 </head>
-<body class="bg-black text-white flex items-center justify-center min-h-screen transition-colors duration-500">
+<body class="bg-gray-900 text-white min-h-screen transition-colors duration-500">
 
-  <div class="max-w-md text-center bg-white/10 text-white rounded-xl p-6 backdrop-blur-lg shadow-lg dark:bg-black/40" id="mainContainer">
-    <img
-      class="rounded-lg mb-4"
-      src="https://images.pexels.com/photos/3062545/pexels-photo-3062545.jpeg"
-      alt="Movie poster"
+  <header class="flex justify-between items-center p-4 bg-gray-800 shadow">
+    <h1 class="text-2xl font-bold">Video Gallery</h1>
+
+    <div class="flex space-x-4 items-center">
+      <button id="toggleDark" class="text-2xl focus:outline-none" aria-label="Toggle Dark Mode">
+        <i class="ph ph-moon-stars"></i>
+      </button>
+
+      <button id="voiceToggle" class="text-2xl focus:outline-none" aria-label="Toggle Voice Control">
+        <i class="ph ph-microphone"></i>
+      </button>
+    </div>
+  </header>
+
+  <section class="p-4 max-w-6xl mx-auto">
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Search videos..."
+      class="w-full p-2 rounded bg-gray-800 text-white placeholder-gray-400 mb-4 focus:outline-none focus:ring-2 focus:ring-red-600"
+      aria-label="Search videos"
     />
-    <h1 class="text-2xl font-semibold">Movie Title</h1>
-    <p class="my-4">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa minima repellendus magnam omnis earum.
-    </p>
-    <div class="flex justify-center gap-4 flex-wrap">
-      <button id="watchBtn" class="px-4 py-2 bg-white text-black rounded hover:bg-orange-400 focus:outline-none focus:ring-2 focus:ring-orange-500">
-        Watch Now
+
+    <div class="flex space-x-3 mb-6 justify-center">
+      <button class="category-btn px-4 py-2 rounded bg-red-600 font-semibold" data-category="all">All</button>
+      <button class="category-btn px-4 py-2 rounded hover:bg-red-600 transition" data-category="action">Action</button>
+      <button class="category-btn px-4 py-2 rounded hover:bg-red-600 transition" data-category="drama">Drama</button>
+      <button class="category-btn px-4 py-2 rounded hover:bg-red-600 transition" data-category="nature">Nature</button>
+    </div>
+
+    <div id="videoContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+  </section>
+
+  <!-- Trailer Popup -->
+  <div
+    id="trailerContainer"
+    class="fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="trailerTitle"
+  >
+    <div class="relative max-w-3xl w-full bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+      <button
+        id="closeTrailer"
+        class="absolute top-2 right-2 text-white text-3xl font-bold focus:outline-none"
+        aria-label="Close trailer"
+      >
+        &times;
       </button>
-      <button id="toggleMode" class="px-4 py-2 bg-white text-black rounded hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-500">
-        Toggle Mode
-      </button>
-      <button id="voiceBtn"
-              aria-label="Activate voice control"
-              title="Voice Control"
-              class="px-4 py-2 bg-white text-black rounded hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        <i class="fa-solid fa-microphone"></i>
-      </button>
+      <video
+        id="trailerVideo"
+        controls
+        class="w-full h-auto max-h-[80vh] bg-black"
+      ></video>
+      <div
+        id="durationBadge"
+        class="absolute bottom-2 right-2 bg-red-600 text-white px-2 py-1 text-xs rounded"
+      ></div>
     </div>
   </div>
 
-  <div class="trailer-container active" id="trailerContainer">
-    <video src="trailer.mp4" controls id="trailerVideo"></video>
-    <i class="fa-solid fa-circle-xmark fa-2x close-icon" id="closeIcon" aria-label="Close trailer" title="Close trailer"></i>
-  </div>
-
-  <!-- Custom Script -->
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>

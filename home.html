@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Home - Video Hub</title>
+  <link href="https://cdn.tailwindcss.com" rel="stylesheet" />
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <style>
+    html {
+      scroll-behavior: smooth;
+      transition: background-color 0.8s ease, color 0.8s ease;
+    }
+    body {
+      background-image: url('https://images.unsplash.com/photo-1504384308090-c894fdcc538d');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      color: white;
+      transition: background-color 0.8s ease, color 0.8s ease;
+      min-height: 100vh;
+    }
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 0;
+      transition: background-color 0.8s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+    /* Dark mode */
+    html.dark body {
+      background-image: none;
+      background-color: #111827; /* slate-900 */
+      color: #e5e7eb; /* gray-200 */
+    }
+    html.dark .overlay {
+      background-color: rgba(0, 0, 0, 0.85);
+    }
+    /* Navbar */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 50;
+      background-color: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgb(0 0 0 / 0.7);
+      transition: background-color 0.5s ease, box-shadow 0.5s ease;
+    }
+    html.dark nav {
+      background-color: rgba(17, 24, 39, 0.85);
+      box-shadow: 0 4px 12px rgb(255 255 255 / 0.05);
+    }
+    nav h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: white;
+    }
+    nav a {
+      color: white;
+      margin-left: 1.5rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+    }
+    nav a:hover {
+      color: #f87171; /* red-400 */
+    }
+    /* Dark mode link hover */
+    html.dark nav a:hover {
+      color: #f87171;
+    }
+    /* Buttons */
+    a.bg-red-600, button.bg-red-600 {
+      background-color: #dc2626;
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgb(220 38 38 / 0.7);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    a.bg-red-600:hover, button.bg-red-600:hover {
+      background-color: #b91c1c;
+      box-shadow: 0 6px 15px rgb(185 28 28 / 0.9);
+    }
+    html.dark a.bg-red-600, html.dark button.bg-red-600 {
+      box-shadow: 0 0 12px #f87171aa;
+    }
+    html.dark a.bg-red-600:hover, html.dark button.bg-red-600:hover {
+      background-color: #f87171;
+      box-shadow: 0 0 18px #f87171dd;
+    }
+    /* Main heading bounce */
+    h2.animate-bounce {
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    /* Sections */
+    main, section {
+      position: relative;
+      z-index: 10;
+      max-width: 64rem; /* 1024px */
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-top: 10rem;
+      padding-bottom: 5rem;
+      text-align: center;
+    }
+    /* Section titles */
+    section h2 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 2.5rem;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.7);
+    }
+    /* Featured videos grid */
+    #featured-videos .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    @media(min-width: 768px) {
+      #featured-videos .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    /* Aspect ratio for iframes */
+    .aspect-w-16.aspect-h-9 {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 9/16 aspect ratio */
+      overflow: hidden;
+      border-radius: 0.75rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+    }
+    .aspect-w-16.aspect-h-9 iframe {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+      border-radius: 0.75rem;
+    }
+    /* Testimonials */
+    #testimonials .grid {
+      display: grid;
+      gap: 2.5rem;
+    }
+    @media(min-width: 768px) {
+      #testimonials .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    #testimonials .bg-black {
+      background-color: rgba(0,0,0,0.55);
+      padding: 1.5rem;
+      border-radius: 0.75rem;
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.2);
+      font-style: italic;
+      color: #d1d5db;
+      transition: background-color 0.3s ease;
+    }
+    #testimonials .bg-black h3 {
+      margin-top: 1rem;
+      font-weight: 700;
+      color: #f87171;
+      font-style: normal;
+    }
+    #testimonials .bg-black:hover {
+      background-color: rgba(0,0,0,0.75);
+    }
+    /* Forms */
+    form input, form textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: box-shadow 0.3s ease, border-color 0.3s ease;
+      color: black;
+    }
+    form input:focus, form textarea:focus {
+      outline: none;
+      box-shadow: 0 0 10px #dc2626;
+      border-color: #dc2626;
+    }
+    form button {
+      cursor: pointer;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.6);
+      font-size: 0.875rem;
+      z-index: 10;
+    }
+    /* Dark mode footer */
+    html.dark footer {
+      color: rgba(229, 231, 235, 0.6);
+    }
+    /* Dark mode toggle button */
+    #darkModeToggle {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 1.75rem;
+      color: white;
+      transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+      border-radius: 0.375rem;
+      padding: 0.25rem 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 4px transparent;
+    }
+    #darkModeToggle:hover {
+      background-color: #f87171;
+      color: #111827;
+      box-shadow: 0 0 8px #f87171aa;
+    }
+    /* Icon transition */
+    #darkModeIcon {
+      transition: transform 0.4s ease, color 0.4s ease;
+      color: white;
+    }
+    #darkModeIcon.toggle-active {
+      transform: rotate(360deg);
+      color: #f87171;
+    }
+  </style>
+</head>
+<body class="min-h-screen">
+
+  <div class="overlay"></div>
+
+  <!-- Sticky Navigation -->
+  <nav>
+    <h1><i class="ph ph-video-camera"></i> Video Hub</h1>
+    <div style="display:flex; gap:1.5rem; align-items:center;">
+      <a href="#about">About</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#newsletter">Newsletter</a>
+      <a href="#contact">Contact</a>
+      <a href="index.html" class="bg-red-600 hover:bg-red-700 shadow-lg">Enter Gallery</a>
+      <button id="darkModeToggle" aria-label="Toggle Dark Mode">
+        <i id="darkModeIcon" class="ph-moon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <main class="animate-fadeIn text-center pt-40 px-4 max-w-4xl mx-auto relative z-10">
+    <h2 class="text-6xl font-extrabold mb-6 drop-shadow-lg animate-bounce">Welcome to the Video Hub</h2>
+    <p class="mb-10 text-xl text-gray-200">Explore exciting trailers from Action, Drama, and Nature genres, all in one place.</p>
+    <a href="index.html" class="bg-red-600 hover:bg-red-700 px-8 py-4 rounded-full text-2xl font-semibold transition duration-300 shadow-lg transform hover:scale-105 inline-block">Enter Gallery</a>
+  </main>
+
+  <!-- Featured Videos -->
+  <section id="featured-videos" class="text-center relative z-10 px-6 py-20 max-w-6xl mx-auto">
+    <h2>Featured Trailers</h2>
+    <div class="grid">
+      <div class="aspect-w-16 aspect-h-9">
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video player 1" allowfullscreen></iframe>
+      </div>
+      <div class="aspect-w-16 aspect-h-9">
+        <iframe src="https://www.youtube.com/embed/9bZkp7q19f0" title="YouTube video player 2" allowfullscreen></iframe>
+      </div>
+      <div class="aspect-w-16 aspect-h-9">
+        <iframe src="https://www.youtube.com/embed/l482T0yNkeo" title="YouTube video player 3" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section id="testimonials" class="text-white relative z-10 px-6 py-20 max-w-5xl mx-auto">
+    <h2>What Our Viewers Say</h2>
+    <div class="grid">
+      <div class="bg-black">
+        <p>"Amazing selection of trailers! The site is sleek and easy to navigate."</p>
+        <h3>- Sarah J.</h3>
+      </div>
+      <div class="bg-black">
+        <p>"I love discovering new movies here. The featured videos always keep me hooked."</p>
+        <h3>- Michael R.</h3>
+      </div>
+      <div class="bg-black">
+        <p>"Great platform for movie buffs. The newsletter keeps me updated with the latest trailers."</p>
+        <h3>- Emily W.</h3>
+      </div>
+    </div>
+  </section>
+
+  <!-- Newsletter Signup -->
+  <section id="newsletter" class="text-white relative z-10 px-6 py-20 max-w-4xl mx-auto">
+    <h2>Subscribe to Our Newsletter</h2>
+    <p class="mb-8 text-gray-300">Get the latest trailers and updates delivered straight to your inbox.</p>
+    <form class="flex flex-col sm:flex-row justify-center gap-4">
+      <input type="email" placeholder="Your email" required
+        class="px-4 py-3 rounded-lg text-black flex-grow focus:outline-none focus:ring-2 focus:ring-red-600" />
+      <button type="submit" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition">Subscribe</button>
+    </form>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="text-white relative z-10 px-6 py-20 max-w-4xl mx-auto">
+    <h2>Get in Touch</h2>
+    <p class="mb-8 text-gray-300">Have questions or suggestions? Reach out to us!</p>
+    <form class="flex flex-col gap-4 max-w-md mx-auto">
+      <input type="text" placeholder="Your name" required
+        class="px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-red-600" />
+      <input type="email" placeholder="Your email" required
+        class="px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-red-600" />
+      <textarea placeholder="Your message" rows="4" required
+        class="px-4 py-3 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-red-600"></textarea>
+      <button type="submit" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-semibold transition">Send</button>
+    </form>
+  </section>
+
+  <footer>
+    &copy; 2025 Video Hub. All rights reserved.
+  </footer>
+
+  <script>
+    const toggleBtn = document.getElementById('darkModeToggle');
+    const icon = document.getElementById('darkModeIcon');
+
+    // Initialize dark mode based on system preference or saved setting
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+      document.documentElement.classList.add('dark');
+      icon.className = 'ph-sun toggle-active';
+    } else {
+      icon.className = 'ph-moon';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      if (document.documentElement.classList.contains('dark')) {
+        icon.className = 'ph-sun toggle-active';
+        localStorage.setItem('theme', 'dark');
+      } else {
+        icon.className = 'ph-moon';
+        localStorage.setItem('theme', 'light');
+      }
+    });
+  </script>
+
+</body>
+</html>
